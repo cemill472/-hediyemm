@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Beyda 💫</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Courier New", monospace;
+}
+
+body {
+    background: black;
+    overflow: hidden;
+    height: 100vh;
+    color: white;
+    transition: background 1.5s ease;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.center {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    letter-spacing: 2px;
+    z-index: 3;
+}
+
+.fadeText {
+    opacity: 0;
+    transition: opacity 2.5s ease;
+}
+
+.italic {
+    font-style: italic;
+}
+
+#photo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 60%;
+    max-height: 60%;
+    opacity: 0;
+    transition: opacity 2s ease;
+    z-index: 2;
+    border-radius: 14px;
+}
+
+#photoText {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+    color: black;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    z-index: 4;
+}
+
+#startScreen {
+    position: absolute;
+    inset: 0;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 10;
+}
+</style>
+</head>
+
+<body>
+
+<div id="startScreen">🎧 Dokun ve Sürprizi Başlat</div>
+
+<audio id="music">
+    <source src="bu-son-olsun.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="stars"></canvas>
+<img id="photo">
+<div id="photoText">Yakamozzz Güzeliii kalbinnn çokk güzelll 💙</div>
+<div id="text" class="center"></div>
+
+<script>
+const startScreen = document.getElementById("startScreen");
+const music = document.getElementById("music");
+const textEl = document.getElementById("text");
+const photoEl = document.getElementById("photo");
+const photoText = document.getElementById("photoText");
+
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let stars = [];
+for (let i = 0; i < 180; i++) {
+    stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        s: Math.random() * 0.3 + 0.2
+    });
+}
+
+function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+        star.y += star.s;
+        if (star.y > canvas.height) {
+            star.y = 0;
+            star.x = Math.random() * canvas.width;
+        }
+    });
+    requestAnimationFrame(drawStars);
+}
+drawStars();
+
+function fadeInMusic() {
+    music.volume = 0;
+    music.play();
+    let v = 0;
+    const i = setInterval(() => {
+        if (v < 0.6) {
+            v += 0.02;
+            music.volume = v;
+        } else clearInterval(i);
+    }, 200);
+}
+
+function fadeOutMusic() {
+    let v = music.volume;
+    const i = setInterval(() => {
+        if (v > 0.02) {
+            v -= 0.02;
+            music.volume = v;
+        } else {
+            clearInterval(i);
+            music.pause();
+        }
+    }, 200);
+}
+
+function typeText(text, size, wait, cb) {
+    textEl.innerHTML = "";
+    textEl.className = "center";
+    textEl.style.fontSize = size;
+    let i = 0;
+    const t = setInterval(() => {
+        textEl.innerHTML += text[i] === "\n" ? "<br>" : text[i];
+        i++;
+        if (i >= text.length) {
+            clearInterval(t);
+            setTimeout(() => {
+                textEl.innerHTML = "";
+                if (cb) cb();
+            }, wait);
+        }
+    }, 90);
+}
+
+const photos = ["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg"];
+photos.forEach(src => { const img = new Image(); img.src = src; });
+
+let photoIndex = 0;
+
+function showPhotos(cb) {
+    function next() {
+        if (photoIndex >= photos.length) {
+            photoEl.style.opacity = 0;
+            photoText.style.opacity = 0;
+            if (cb) cb();
+            return;
+        }
+        photoEl.src = photos[photoIndex];
+        photoEl.style.opacity = 1;
+        photoText.style.opacity = photoIndex === 3 ? 1 : 0;
+
+        setTimeout(() => {
+            photoEl.style.opacity = 0;
+            photoText.style.opacity = 0;
+            photoIndex++;
+            setTimeout(next, 1200);
+        }, 2500);
+    }
+    next();
+}
+
+function startShow() {
+
+typeText("🎧 Müzik var, sese dikkat et","34px",1200,()=>{
+typeText("✨","90px",1200,()=>{
+typeText("Bugün 28.12.2025","48px",1200,()=>{
+typeText("İyikiii varsınnn","64px",1500,()=>{
+typeText("Doğummm gününnn kutluu olsunnn\nniceee senelereee 💙","48px",1200,()=>{
+
+textEl.className = "center fadeText";
+textEl.style.fontSize = "42px";
+textEl.innerHTML = "Işıkları açalım mı";
+setTimeout(()=>textEl.style.opacity=1,100);
+
+setTimeout(()=>{
+document.body.style.background="white";
+canvas.style.display="none";
+textEl.className="center italic";
+textEl.style.color="black";
+textEl.innerHTML="Lumos!";
+},3200);
+
+setTimeout(()=>{
+textEl.innerHTML="";
+showPhotos(()=>{
+document.body.style.background="black";
+canvas.style.display="block";
+textEl.style.color="white";
+fadeOutMusic();
+typeText("İyi ki seni tanımışımmm 💙\n\n- Emir","42px",999999);
+});
+},4200);
+
+});
+});
+});
+});
+});
+}
+
+startScreen.onclick=()=>{
+startScreen.style.display="none";
+fadeInMusic();
+startShow();
+};
+</script>
+
+</body>
+</html>
